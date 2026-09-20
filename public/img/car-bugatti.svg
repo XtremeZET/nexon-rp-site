@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <radialGradient id="bg" cx="0.5" cy="0.45" r="0.8">
+      <stop offset="0" stop-color="#2a1e08"/>
+      <stop offset="1" stop-color="#0a0f18"/>
+    </radialGradient>
+  </defs>
+  <rect width="120" height="120" rx="18" fill="url(#bg)"/>
+  <ellipse cx="60" cy="88" rx="46" ry="6" fill="#1e6fd9" opacity="0.18"/>
+  <rect x="10" y="86" width="100" height="3" rx="1.5" fill="#1e6fd9" opacity="0.7"/><circle cx="36" cy="79" r="10" fill="#0b0f16" stroke="#233042" stroke-width="2.5"/>
+  <circle cx="36" cy="79" r="4" fill="#9fe6ff"/>
+  <circle cx="88" cy="79" r="10" fill="#0b0f16" stroke="#233042" stroke-width="2.5"/>
+  <circle cx="88" cy="79" r="4" fill="#9fe6ff"/>
+  <path d="M84 50 L96 43 L100 45 L88 53 Z" fill="#1e6fd9" stroke="#0d2540" stroke-width="1"/><path d="M10 78 L16 67 Q20 61 30 59 L44 57 L54 47 Q62 43 74 43 L88 51 Q101 55 106 62 L107 74 Q108 79 101 79 L17 79 Q10 79 10 78 Z" fill="#1e6fd9" stroke="#0d2540" stroke-width="2"/>
+  <path d="M52 57 L60 48 Q65 45 72 45 L78 48 L86 55 Z" fill="#0b1626" opacity="0.92"/>
+  <line x1="60" y1="54" x2="60" y2="79" stroke="#0d2540" stroke-width="1.5" opacity="0.6"/>
+  <text x="60" y="104" font-family="Arial, sans-serif" font-size="10" fill="#9aa3b2" text-anchor="middle">Bugatti Veyron</text>
+</svg>

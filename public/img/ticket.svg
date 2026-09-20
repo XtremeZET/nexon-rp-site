@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <radialGradient id="bgt" cx="0.5" cy="0.42" r="0.8">
+      <stop offset="0" stop-color="#241a3f"/>
+      <stop offset="1" stop-color="#0a0f18"/>
+    </radialGradient>
+  </defs>
+  <rect width="120" height="120" rx="18" fill="url(#bgt)"/>
+  <g transform="rotate(-8 60 60)">
+    <rect x="22" y="44" width="76" height="34" rx="6" fill="#b366ff" stroke="#7a3fd1" stroke-width="2"/>
+    <line x1="60" y1="44" x2="60" y2="78" stroke="#7a3fd1" stroke-width="2" stroke-dasharray="3 4"/>
+    <text x="41" y="66" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#fff" text-anchor="middle">SPIN</text>
+    <text x="79" y="67" font-family="Arial, sans-serif" font-size="17" font-weight="bold" fill="#2a1250" text-anchor="middle">+2</text>
+  </g>
+  <g transform="rotate(7 60 48)">
+    <rect x="30" y="32" width="58" height="24" rx="5" fill="#8a4fd1" opacity="0.85" stroke="#7a3fd1" stroke-width="2"/>
+    <text x="59" y="49" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#e6d4ff" text-anchor="middle">+1 SPIN</text>
+  </g>
+  <circle cx="24" cy="86" r="2.5" fill="#d8baff" opacity="0.8"/>
+  <circle cx="98" cy="30" r="2.5" fill="#d8baff" opacity="0.8"/>
+</svg>

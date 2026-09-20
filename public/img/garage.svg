@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="gdoor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5c7ba6"/>
+      <stop offset="1" stop-color="#2c4a77"/>
+    </linearGradient>
+    <radialGradient id="gbg" cx="0.5" cy="0.45" r="0.8">
+      <stop offset="0" stop-color="#12213a"/>
+      <stop offset="1" stop-color="#0a0f18"/>
+    </radialGradient>
+  </defs>
+  <rect width="120" height="120" rx="18" fill="url(#gbg)"/>
+  <path d="M22 52 L60 34 L98 52 Z" fill="#1c5f9e" stroke="#124a7a" stroke-width="2"/>
+  <rect x="28" y="52" width="64" height="44" rx="4" fill="#22344e" stroke="#2c4a77" stroke-width="2"/>
+  <rect x="36" y="58" width="48" height="38" rx="3" fill="url(#gdoor)" stroke="#1a3355" stroke-width="2"/>
+  <line x1="36" y1="68" x2="84" y2="68" stroke="#1a3355" stroke-width="2"/>
+  <line x1="36" y1="78" x2="84" y2="78" stroke="#1a3355" stroke-width="2"/>
+  <line x1="36" y1="88" x2="84" y2="88" stroke="#1a3355" stroke-width="2"/>
+  <circle cx="76" cy="77" r="4" fill="#ffd873"/>
+  <circle cx="60" cy="44" r="3" fill="#9fe6ff"/>
+</svg>

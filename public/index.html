@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexon Role-Play — CRMP сервер</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar" id="topbar">
+  <div class="container topbar-inner">
+    <a href="#hero" class="logo">NEXON<span>ROLE</span>PLAY</a>
+    <nav class="nav" id="nav">
+      <a href="#features">Сервер</a>
+      <a href="#monitoring">Мониторинг</a>
+      <a href="#start">Начать играть</a>
+      <a href="#donate">Донат</a>
+      <a href="roulette.html">Рулетка</a>
+      <a href="forum.html">Форум</a>
+      <a href="#top">Топ</a>
+      <a href="#news">Новости</a>
+    </nav>
+    <div class="online-badge"><i></i><span id="topbar-online">…</span>/<span id="topbar-max">500</span> онлайн</div>
+    <div class="auth-area" id="auth-area"></div>
+    <button class="burger" id="burger" aria-label="Меню">☰</button>
+  </div>
+</header>
+
+<section class="hero" id="hero">
+  <div class="hero-bg"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+  <canvas id="fx" class="fx"></canvas>
+  <div class="container hero-inner">
+    <div class="hero-tag">Nexon Role-Play • Бонусный проект</div>
+    <h1>ТВОЯ ИСТОРИЯ<br><em>НАЧИНАЕТСЯ</em> ЗДЕСЬ</h1>
+    <p class="hero-sub">Лучший RP-сервер CRMP: живая экономика, банды, бизнесы, автопарк и честная администрация. Заходи — город уже ждёт.</p>
+    <div class="ip-box">
+      <span class="ip-label">IP СЕРВЕРА</span>
+      <code id="server-ip">nexon-rp.ru:7777</code>
+      <button id="copy-ip">Скопировать</button>
+    </div>
+    <div class="hero-actions">
+      <a href="#start" class="btn btn-red">Начать играть</a>
+      <a href="#donate" class="btn btn-ghost">Поддержать проект</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><b id="stat-online" data-count="247">0</b><span>игроков сейчас</span></div>
+      <div class="stat"><b id="stat-accounts" data-count="18400">0</b><span>аккаунтов</span></div>
+      <div class="stat"><b data-count="99">0</b><span>% аптайм</span></div>
+      <div class="stat"><b data-count="365">0</b><span>дней без вайпов</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-head"><span>Почему мы</span><h2>Сервер, в который возвращаются</h2></div>
+    <div class="grid features-grid">
+      <div class="card"><div class="card-ico">💼</div><h3>Работы и бизнесы</h3><p>От дальнобоя до собственного казино: 30+ способов заработка и настоящая конкуренция за рынок.</p></div>
+      <div class="card"><div class="card-ico">🏠</div><h3>Жильё и имущество</h3><p>Дома, квартиры и склады на аукционе. Обставляй интерьер, копи коллекцию авто в гараже.</p></div>
+      <div class="card"><div class="card-ico">🔫</div><h3>Банды и мафии</h3><p>Захват территорий, разборки за бизнес, войны за влияние. Или встань на сторону закона — LSPD, FBI, армия.</p></div>
+      <div class="card"><div class="card-ico">🚗</div><h3>Автотюнинг</h3><p>300+ машин, прокачка движка, нитро, покраска и номера на заказ. Собери тачку мечты.</p></div>
+      <div class="card"><div class="card-ico">🎉</div><h3>Ивенты каждую неделю</h3><p>Гонки на выживание, квесты, розыгрыши виртуальной валюты и призов для реальных игроков.</p></div>
+      <div class="card"><div class="card-ico">🛡️</div><h3>Честная игра</h3><p>Мощный античит и активная администрация. Читерам здесь не место — мы за это ручаемся.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-dark" id="monitoring">
+  <div class="container">
+    <div class="section-head"><span>Статистика</span><h2>Мониторинг сервера</h2></div>
+    <div class="monitor">
+      <div class="monitor-row"><span>Статус</span><b class="online-text"><i></i> Онлайн</b></div>
+      <div class="monitor-row"><span>Название</span><b id="mon-name">…</b></div>
+      <div class="monitor-row"><span>Режим</span><b id="mon-mode">…</b></div>
+      <div class="monitor-row"><span>Карта</span><b id="mon-map">…</b></div>
+      <div class="monitor-row"><span>Версия</span><b id="mon-version">…</b></div>
+      <div class="monitor-row"><span>Игроки</span><b><span id="monitor-online">…</span> / <span id="monitor-max">500</span></b></div>
+      <div class="progress"><div class="progress-fill" id="progress-fill"></div></div>
+      <p class="monitor-note">Данные обновляются каждые 5 минут</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="start">
+  <div class="container">
+    <div class="section-head"><span>3 шага</span><h2>Как начать играть</h2></div>
+    <div class="grid steps-grid">
+      <div class="step"><div class="step-num">1</div><h3>Скачай CRMP</h3><p>Скачай клиент Criminal Russia Multiplayer и установи его — понадобится чистая GTA San Andreas 1.0.</p><a href="#" class="btn btn-ghost">Скачать клиент</a></div>
+      <div class="step"><div class="step-num">2</div><h3>Введи IP</h3><p>Запусти игру, нажми «Добавить сервер» и вставь наш адрес: <code id="step-ip">nexon-rp.ru:7777</code></p><button class="btn btn-ghost copy-again">Скопировать IP</button></div>
+      <div class="step"><div class="step-num">3</div><h3>Создай персонажа</h3><p>Пройди регистрацию, придумай имя вида <b>Imya_Familiya</b> и начни свою историю — с работы таксистом или сразу в банду.</p><p class="hero-roles">Кем станешь ты: <span id="role-word">таксистом</span></p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-dark" id="donate">
+  <div class="container">
+    <div class="section-head"><span>Привилегии</span><h2>Донат-услуги</h2><p class="section-sub">Поддержи проект и получи бонусы. Все покупки выдаются мгновенно и не влияют на баланс RP.</p></div>
+    <div class="grid donate-grid" id="donate-grid"></div>
+  </div>
+</section>
+
+<section class="section" id="rules">
+  <div class="container">
+    <div class="section-head"><span>Порядок</span><h2>Правила сервера</h2></div>
+    <div class="rules-list" id="rules-list"></div>
+  </div>
+</section>
+
+<section class="section section-dark" id="news">
+  <div class="container">
+    <div class="section-head"><span>События</span><h2>Новости проекта</h2></div>
+    <div class="grid news-grid" id="news-grid"></div>
+  </div>
+</section>
+
+<section class="section" id="top">
+  <div class="container">
+    <div class="section-head"><span>Зал славы</span><h2>Топ игроков</h2></div>
+    <div class="top-cols">
+      <div class="card panel"><h3>💰 Богатейшие</h3><ol class="top-list" id="top-rich"><li class="empty">Загрузка…</li></ol></div>
+      <div class="card panel"><h3>🍀 Счастливчики рулетки</h3><ol class="top-list" id="top-lucky"><li class="empty">Загрузка…</li></ol></div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-col">
+      <a href="#hero" class="logo">NEXON<span>ROLE</span>PLAY</a>
+      <p>Фанатский проект по игре Criminal Russia Multiplayer. Мы не аффилированы с разработчиками GTA:SA.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Игрокам</h4>
+      <a href="#start">Начать играть</a>
+      <a href="#rules">Правила</a>
+      <a href="#monitoring">Мониторинг</a>
+      <a href="#top">Топ игроков</a>
+    </div>
+    <div class="footer-col">
+      <h4>Проект</h4>
+      <a href="#donate">Донат</a>
+      <a href="roulette.html">Рулетка 🎰</a>
+      <a href="forum.html">Форум</a>
+      <a href="#news">Новости</a>
+      <a href="cabinet.html">Личный кабинет</a>
+    </div>
+    <div class="footer-col">
+      <h4>Мы на связи</h4>
+      <a href="#" id="footer-vk" target="_blank" rel="noopener">VK</a>
+      <a href="#" id="footer-discord" target="_blank" rel="noopener">Discord</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© <span id="year"></span> Nexon Role-Play. Все права защищены.</div>
+</footer>
+
+<div class="toast" id="toast">IP скопирован в буфер обмена</div>
+
+<div class="modal-overlay" id="auth-modal" hidden>
+  <div class="modal">
+    <button class="modal-close" data-close="auth-modal" aria-label="Закрыть">×</button>
+    <h3 class="modal-title" id="auth-title">Вход</h3>
+    <form id="login-form" class="auth-form">
+      <label>Логин<input name="login" required autocomplete="username"></label>
+      <label>Пароль<input name="password" type="password" required autocomplete="current-password"></label>
+      <div class="form-error" id="login-error"></div>
+      <button class="btn btn-red btn-block" type="submit">Войти</button>
+      <p class="form-switch">Нет аккаунта? <a href="#" id="to-register">Зарегистрируйся</a></p>
+    </form>
+    <form id="register-form" class="auth-form" hidden>
+      <label>Логин (латиница)<input name="login" required autocomplete="username"></label>
+      <label>Ник в игре<input name="nick" placeholder="Imya_Familiya"></label>
+      <label>Пароль<input name="password" type="password" required autocomplete="new-password"></label>
+      <label>Повтор пароля<input name="password2" type="password" required autocomplete="new-password"></label>
+      <div class="form-error" id="register-error"></div>
+      <button class="btn btn-red btn-block" type="submit">Создать аккаунт</button>
+      <p class="form-switch">Уже есть аккаунт? <a href="#" id="to-login">Войти</a></p>
+    </form>
+  </div>
+</div>
+
+<div class="modal-overlay" id="order-modal" hidden>
+  <div class="modal">
+    <button class="modal-close" data-close="order-modal" aria-label="Закрыть">×</button>
+    <h3 class="modal-title">Покупка «<span id="order-plan-name"></span>»</h3>
+    <form id="order-form" class="auth-form">
+      <label>Ник в игре<input name="nick" id="order-nick" required></label>
+      <label>Промокод (необязательно)<input name="promo" placeholder="NEXON"></label>
+      <div class="order-summary">К оплате: <b id="order-price"></b></div>
+      <div class="form-error" id="order-error"></div>
+      <button class="btn btn-red btn-block" type="submit">Оставить заявку</button>
+      <p class="form-note">Оплата вручную: после заявки с тобой свяжется администрация.</p>
+    </form>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="bill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8fe3a8"/>
+      <stop offset="1" stop-color="#2e9e5b"/>
+    </linearGradient>
+    <radialGradient id="bg4" cx="0.5" cy="0.45" r="0.8">
+      <stop offset="0" stop-color="#12351f"/>
+      <stop offset="1" stop-color="#0a0f18"/>
+    </radialGradient>
+  </defs>
+  <rect width="120" height="120" rx="18" fill="url(#bg4)"/>
+  <g transform="rotate(5 60 46)">
+    <rect x="24" y="34" width="84" height="30" rx="5" fill="#63c97f" stroke="#1d6b3c" stroke-width="2"/>
+    <circle cx="66" cy="49" r="9" fill="#0e2a1a" opacity="0.8"/>
+  </g>
+  <g transform="rotate(-6 60 60)">
+    <rect x="18" y="40" width="84" height="44" rx="6" fill="url(#bill)" stroke="#1d6b3c" stroke-width="2"/>
+    <circle cx="60" cy="62" r="14" fill="#0e2a1a" opacity="0.9"/>
+    <text x="60" y="70" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#bdf5cd" text-anchor="middle">₽</text>
+    <rect x="24" y="46" width="10" height="6" rx="2" fill="#0e2a1a" opacity="0.55"/>
+    <rect x="86" y="72" width="10" height="6" rx="2" fill="#0e2a1a" opacity="0.55"/>
+  </g>
+</svg>

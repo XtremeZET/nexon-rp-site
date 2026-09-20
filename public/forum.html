@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Форум — Nexon Role-Play</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar" id="topbar">
+  <div class="container topbar-inner">
+    <a href="index.html" class="logo">NEXON<span>ROLE</span>PLAY</a>
+    <nav class="nav" id="nav">
+      <a href="index.html">Главная</a>
+      <a href="roulette.html">Рулетка</a>
+      <a href="cabinet.html">Кабинет</a>
+    </nav>
+    <div class="auth-area" id="auth-area"></div>
+    <button class="burger" id="burger" aria-label="Меню">☰</button>
+  </div>
+</header>
+
+<section class="page-wrap">
+  <div class="container">
+    <div class="f-head">
+      <div>
+        <h1 class="page-title">Форум</h1>
+        <p class="page-sub" style="margin-bottom:0">Обсуждаем сервер, тачки, жалобы и идеи</p>
+      </div>
+      <button class="btn btn-red" id="f-new-thread" hidden>+ Создать тему</button>
+    </div>
+    <div class="f-breadcrumb" id="f-crumb"></div>
+    <div id="forum-root"><p class="empty">Загрузка…</p></div>
+  </div>
+</section>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal-overlay" id="newthread-modal" hidden>
+  <div class="modal" style="max-width:560px">
+    <button class="modal-close" data-close="newthread-modal" aria-label="Закрыть">×</button>
+    <h3 class="modal-title" id="nt-title">Новая тема</h3>
+    <form id="newthread-form" class="auth-form">
+      <label>Заголовок<input name="title" required maxlength="120"></label>
+      <label>Сообщение<textarea name="text" id="nt-text" class="f-area" required maxlength="5000" style="min-height:160px"></textarea></label>
+      <div class="form-error" id="nt-error"></div>
+      <button class="btn btn-red btn-block" type="submit">Опубликовать</button>
+    </form>
+  </div>
+</div>
+
+<script src="forum.js"></script>
+</body>
+</html>

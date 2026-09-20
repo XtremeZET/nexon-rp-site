@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <radialGradient id="bg" cx="0.5" cy="0.45" r="0.8">
+      <stop offset="0" stop-color="#12213a"/>
+      <stop offset="1" stop-color="#0a0f18"/>
+    </radialGradient>
+  </defs>
+  <rect width="120" height="120" rx="18" fill="url(#bg)"/>
+  <ellipse cx="60" cy="88" rx="46" ry="6" fill="#6e5a2e" opacity="0.18"/>
+  <circle cx="36" cy="79" r="10" fill="#0b0f16" stroke="#233042" stroke-width="2.5"/>
+  <circle cx="36" cy="79" r="4" fill="#9fe6ff"/>
+  <circle cx="88" cy="79" r="10" fill="#0b0f16" stroke="#233042" stroke-width="2.5"/>
+  <circle cx="88" cy="79" r="4" fill="#9fe6ff"/>
+  <path d="M14 76 L20 62 Q25 55 35 54 L50 52 L60 42 Q65 38 74 38 L82 42 L90 53 Q100 55 104 62 L106 74 Q107 79 101 79 L21 79 Q14 79 14 76 Z" fill="#6e5a2e" stroke="#0d2540" stroke-width="2"/>
+  <path d="M38 54 L49 52 L60 43 Q65 40 73 40 L79 44 L86 53 Z" fill="#0b1626" opacity="0.92"/>
+  <line x1="60" y1="54" x2="60" y2="79" stroke="#0d2540" stroke-width="1.5" opacity="0.6"/>
+  <text x="60" y="104" font-family="Arial, sans-serif" font-size="10" fill="#9aa3b2" text-anchor="middle">Infiniti G35</text>
+</svg>

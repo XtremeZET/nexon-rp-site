@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <radialGradient id="bg" cx="0.5" cy="0.45" r="0.8">
+      <stop offset="0" stop-color="#26180e"/>
+      <stop offset="1" stop-color="#0a0f18"/>
+    </radialGradient>
+  </defs>
+  <rect width="120" height="120" rx="18" fill="url(#bg)"/>
+  <ellipse cx="60" cy="88" rx="46" ry="6" fill="#4a5c3a" opacity="0.18"/>
+  <circle cx="36" cy="79" r="10" fill="#0b0f16" stroke="#233042" stroke-width="2.5"/>
+  <circle cx="36" cy="79" r="4" fill="#9fe6ff"/>
+  <circle cx="88" cy="79" r="10" fill="#0b0f16" stroke="#233042" stroke-width="2.5"/>
+  <circle cx="88" cy="79" r="4" fill="#9fe6ff"/>
+  <path d="M16 78 L18 61 L26 47 Q28 43 36 43 L72 43 Q78 43 82 47 L90 59 L100 61 Q104 63 104 69 L104 74 Q105 79 99 79 L22 79 Q16 79 16 78 Z" fill="#4a5c3a" stroke="#0d2540" stroke-width="2"/>
+  <path d="M30 60 L32 49 Q33 46 38 46 L48 46 L48 60 Z M52 46 L70 46 Q74 46 76 49 L80 60 L52 60 Z" fill="#0b1626" opacity="0.92"/>
+  <line x1="60" y1="54" x2="60" y2="79" stroke="#0d2540" stroke-width="1.5" opacity="0.6"/>
+  <text x="60" y="104" font-family="Arial, sans-serif" font-size="10" fill="#9aa3b2" text-anchor="middle">UAZ-469</text>
+</svg>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Личный кабинет — Nexon Role-Play</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar" id="topbar">
+  <div class="container topbar-inner">
+    <a href="index.html" class="logo">NEXON<span>ROLE</span>PLAY</a>
+    <nav class="nav" id="nav">
+      <a href="index.html">Главная</a>
+      <a href="index.html#donate">Донат</a>
+      <a href="index.html#news">Новости</a>
+      <a href="forum.html">Форум</a>
+    </nav>
+    <div class="auth-area" id="auth-area"></div>
+    <button class="burger" id="burger" aria-label="Меню">☰</button>
+  </div>
+</header>
+
+<section class="page-wrap">
+  <div class="container">
+    <h1 class="page-title">Личный кабинет</h1>
+    <p class="page-sub">Твой профиль, привилегии и заявки на донат</p>
+    <div class="cabinet-grid">
+      <div>
+        <div class="card panel profile-card" id="profile-card">
+          <div class="avatar" id="profile-avatar">?</div>
+          <div class="profile-name" id="profile-name">…</div>
+          <div class="profile-login" id="profile-login"></div>
+          <div class="kv"><span>Роль</span><b id="profile-role">—</b></div>
+          <div class="kv"><span>Баланс</span><b id="profile-balance">0 ₽</b></div>
+          <div class="kv"><span>Регистрация</span><b id="profile-created">—</b></div>
+          <div class="kv"><span>Последний вход</span><b id="profile-last">—</b></div>
+          <h3 style="margin-top:22px">Привилегии</h3>
+          <ul class="priv-list" id="profile-priv"></ul>
+        </div>
+        <div class="card panel">
+          <h3>Промокод 🎟️</h3>
+          <form id="promo-form" class="auth-form">
+            <label>Код промокода<input name="code" required placeholder="NEXON-2026" style="text-transform:uppercase"></label>
+            <div class="form-error" id="promo-error"></div>
+            <button class="btn btn-red btn-block" type="submit">Активировать</button>
+          </form>
+        </div>
+        <div class="card panel">
+          <h3>Смена пароля</h3>
+          <form id="pass-form" class="auth-form">
+            <label>Текущий пароль<input name="current" type="password" required autocomplete="current-password"></label>
+            <label>Новый пароль<input name="next" type="password" required autocomplete="new-password"></label>
+            <div class="form-error" id="pass-error"></div>
+            <button class="btn btn-red btn-block" type="submit">Сменить пароль</button>
+          </form>
+        </div>
+      </div>
+      <div>
+        <div class="card panel">
+          <h3>Мои заявки</h3>
+          <div class="tbl-wrap" id="orders-box">
+            <p class="empty">Загрузка…</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="toast" id="toast"></div>
+
+<script src="cabinet.js"></script>
+</body>
+</html>

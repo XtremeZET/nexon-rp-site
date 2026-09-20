@@ -1,0 +1,12 @@
+{
+  "name": "nexon-rp-site",
+  "version": "1.0.0",
+  "description": "Nexon Role-Play — сайт CRMP сервера: кейсы, рулетка, форум, кабинет, админка",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

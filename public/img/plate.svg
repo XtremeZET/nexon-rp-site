@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <radialGradient id="bgp" cx="0.5" cy="0.45" r="0.8">
+      <stop offset="0" stop-color="#12213a"/>
+      <stop offset="1" stop-color="#0a0f18"/>
+    </radialGradient>
+  </defs>
+  <rect width="120" height="120" rx="18" fill="url(#bgp)"/>
+  <g transform="rotate(-4 60 60)">
+    <rect x="16" y="42" width="88" height="36" rx="6" fill="#e8eaf0" stroke="#9aa3b2" stroke-width="2"/>
+    <rect x="16" y="42" width="12" height="36" rx="6" fill="#35a2ff"/>
+    <rect x="16" y="58" width="12" height="6" fill="#ff4d6d"/>
+    <text x="64" y="66" font-family="Arial, sans-serif" font-size="17" font-weight="bold" fill="#12233d" text-anchor="middle">NEXON 777</text>
+    <circle cx="26" cy="48" r="1.6" fill="#9aa3b2"/>
+    <circle cx="26" cy="72" r="1.6" fill="#9aa3b2"/>
+  </g>
+  <circle cx="98" cy="34" r="3" fill="#9fe6ff" opacity="0.8"/>
+  <circle cx="22" cy="88" r="2.5" fill="#9fe6ff" opacity="0.6"/>
+</svg>

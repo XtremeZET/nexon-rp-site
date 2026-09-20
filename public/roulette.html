@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Донат-рулетка — Nexon Role-Play</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar" id="topbar">
+  <div class="container topbar-inner">
+    <a href="index.html" class="logo">NEXON<span>ROLE</span>PLAY</a>
+    <nav class="nav" id="nav">
+      <a href="index.html">Главная</a>
+      <a href="index.html#donate">Донат</a>
+      <a href="forum.html">Форум</a>
+      <a href="cabinet.html">Кабинет</a>
+    </nav>
+    <div class="auth-area" id="auth-area"></div>
+    <button class="burger" id="burger" aria-label="Меню">☰</button>
+  </div>
+</header>
+
+<section class="page-wrap roul-page">
+  <div class="container">
+    <h1 class="page-title">Кейсы и рулетка 🎰</h1>
+    <p class="page-sub">Выбери кейс, крути и выигрывай. Стандартный — один бесплатный прокрут в день!</p>
+
+    <div class="roul-top">
+      <div class="roul-balance">Баланс: <b id="roul-balance">—</b></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <div class="st st-approved" id="roul-free" hidden>🎁 Бесплатный прокрут доступен</div>
+        <div class="st st-new" id="roul-cd" hidden>⏳ …</div>
+        <div class="st st-epic" id="roul-bonus" hidden>🎟 …</div>
+        <div class="st st-legend" id="roul-streak" hidden>🔥 …</div>
+      </div>
+    </div>
+
+    <div class="case-select" id="case-select"></div>
+
+    <div class="roul-window" id="roul-window">
+      <div class="roul-fade roul-fade-l"></div>
+      <div class="roul-fade roul-fade-r"></div>
+      <div class="roul-marker"></div>
+      <div class="roul-strip" id="roul-strip"></div>
+    </div>
+
+    <div class="roul-actions">
+      <button class="btn btn-red btn-roul" id="spin-btn">Крутить</button>
+      <button class="btn btn-ghost" id="demo-btn">🎲 Демо-прокрут без приза</button>
+      <div class="roul-toggles">
+        <label class="tgl"><input type="checkbox" id="fast-tgl"> 🚀 Быстрая прокрутка</label>
+        <label class="tgl"><input type="checkbox" id="sound-tgl" checked> 🔊 Звук</label>
+      </div>
+      <a class="back-link" href="cabinet.html">Баланс пополняет администрация — напиши в Discord →</a>
+    </div>
+
+    <div class="roul-cols">
+      <div class="card panel">
+        <h3>Шансы и призы</h3>
+        <div class="chances" id="chances"><p class="empty">Загрузка…</p></div>
+      </div>
+      <div class="card panel">
+        <h3>Последние выигрыши</h3>
+        <ul class="hist" id="hist"><li class="empty">Пока никто не крутил — будь первым!</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal-overlay" id="win-modal" hidden>
+  <div class="modal win-modal">
+    <button class="modal-close" data-close="win-modal" aria-label="Закрыть">×</button>
+    <canvas id="confetti"></canvas>
+    <div class="win-content" id="win-content"></div>
+  </div>
+</div>
+
+<script src="roulette.js"></script>
+</body>
+</html>

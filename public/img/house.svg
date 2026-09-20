@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <radialGradient id="bgh" cx="0.5" cy="0.4" r="0.8">
+      <stop offset="0" stop-color="#10304e"/>
+      <stop offset="1" stop-color="#0a0f18"/>
+    </radialGradient>
+  </defs>
+  <rect width="120" height="120" rx="18" fill="url(#bgh)"/>
+  <circle cx="30" cy="26" r="11" fill="#ffd873" opacity="0.9"/>
+  <path d="M0 84 Q30 76 60 84 T120 84 V120 H0 Z" fill="#1e6fd9" opacity="0.5"/>
+  <path d="M0 98 Q40 90 80 98 T120 96 V120 H0 Z" fill="#164a8a" opacity="0.75"/>
+  <rect x="46" y="56" width="44" height="32" rx="3" fill="#22344e" stroke="#2c4a77" stroke-width="2"/>
+  <path d="M42 58 L68 40 L94 58 Z" fill="#35a2ff" stroke="#124a7a" stroke-width="2"/>
+  <rect x="60" y="64" width="16" height="14" rx="2" fill="#ffd873"/>
+  <rect x="50" y="70" width="8" height="18" rx="2" fill="#12233d"/>
+  <path d="M96 88 Q93 70 98 54" stroke="#8a5a3a" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M98 54 Q86 47 77 53 Q88 56 98 58 Z" fill="#46d17a"/>
+  <path d="M98 54 Q110 47 119 53 Q108 56 98 58 Z" fill="#46d17a"/>
+  <path d="M98 54 Q95 42 86 38 Q93 48 98 56 Z" fill="#46d17a"/>
+</svg>

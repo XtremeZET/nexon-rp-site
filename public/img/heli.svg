@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="hbody" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9fe6ff"/>
+      <stop offset="1" stop-color="#1e6fd9"/>
+    </linearGradient>
+    <radialGradient id="hbg" cx="0.5" cy="0.45" r="0.8">
+      <stop offset="0" stop-color="#0d2438"/>
+      <stop offset="1" stop-color="#0a0f18"/>
+    </radialGradient>
+  </defs>
+  <rect width="120" height="120" rx="18" fill="url(#hbg)"/>
+  <rect x="16" y="22" width="88" height="4" rx="2" fill="#9fe6ff" opacity="0.9"/>
+  <line x1="60" y1="26" x2="60" y2="40" stroke="#9fe6ff" stroke-width="3"/>
+  <path d="M34 58 Q34 44 50 44 L64 44 Q82 46 88 62 Q92 74 84 76 L44 78 Q34 74 34 58 Z" fill="url(#hbody)" stroke="#124a7a" stroke-width="2"/>
+  <path d="M42 52 Q48 48 56 48 L60 48 L58 64 L40 64 Q38 56 42 52 Z" fill="#0b1626" opacity="0.9"/>
+  <rect x="80" y="58" width="34" height="8" rx="4" fill="#1b5fae" stroke="#124a7a" stroke-width="2"/>
+  <circle cx="112" cy="62" r="8" fill="none" stroke="#9fe6ff" stroke-width="2.5"/>
+  <line x1="30" y1="80" x2="92" y2="80" stroke="#233042" stroke-width="3"/>
+  <line x1="36" y1="80" x2="34" y2="90" stroke="#233042" stroke-width="3"/>
+  <line x1="84" y1="80" x2="86" y2="90" stroke="#233042" stroke-width="3"/>
+  <circle cx="74" cy="60" r="3" fill="#ffd873"/>
+</svg>

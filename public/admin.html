@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Админ-панель — Nexon Role-Play</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar" id="topbar">
+  <div class="container topbar-inner">
+    <a href="index.html" class="logo">NEXON<span>ROLE</span>PLAY <small style="color:var(--gold);font-size:12px;letter-spacing:2px">АДМИН</small></a>
+    <nav class="nav" id="nav">
+      <a href="index.html">Главная</a>
+      <a href="cabinet.html">Кабинет</a>
+    </nav>
+    <div class="auth-area" id="auth-area"></div>
+    <button class="burger" id="burger" aria-label="Меню">☰</button>
+  </div>
+</header>
+
+<div class="container">
+  <div class="admin-wrap">
+    <aside class="admin-side" id="admin-side">
+      <button data-sec="dashboard" class="active">Дашборд</button>
+      <button data-sec="news">Новости</button>
+      <button data-sec="plans">Тарифы</button>
+      <button data-sec="users">Игроки</button>
+      <button data-sec="orders">Заявки</button>
+      <button data-sec="roulette">Рулетка</button>
+      <button data-sec="forum">Форум</button>
+      <button data-sec="promo">Промокоды</button>
+      <button data-sec="rules">Правила</button>
+      <button data-sec="settings">Настройки</button>
+    </aside>
+    <main class="admin-main">
+
+      <section class="admin-section active" id="sec-dashboard">
+        <div class="stat-cards" id="stat-cards"></div>
+        <div class="panel">
+          <h3>Последние заявки</h3>
+          <div class="tbl-wrap" id="dash-orders"></div>
+        </div>
+      </section>
+
+      <section class="admin-section" id="sec-news">
+        <div class="panel">
+          <h3 id="news-form-title">Новая новость</h3>
+          <form id="news-form">
+            <input type="hidden" name="id">
+            <div class="form-grid">
+              <div class="full"><label class="f-label">Заголовок</label><input class="f-input" name="title" required></div>
+              <div class="full"><label class="f-label">Текст</label><textarea class="f-area" name="text"></textarea></div>
+              <label class="check"><input type="checkbox" name="pinned"> Закрепить сверху</label>
+              <div><button class="btn btn-red" type="submit">Сохранить</button></div>
+            </div>
+          </form>
+        </div>
+        <div class="panel"><h3>Опубликованные</h3><div id="news-list"></div></div>
+      </section>
+
+      <section class="admin-section" id="sec-plans">
+        <div class="panel">
+          <h3 id="plan-form-title">Новый тариф</h3>
+          <form id="plan-form">
+            <input type="hidden" name="id">
+            <div class="form-grid">
+              <div><label class="f-label">Название</label><input class="f-input" name="title" required></div>
+              <div><label class="f-label">Цена, ₽</label><input class="f-input" name="price" type="number" min="0" step="1" required></div>
+              <div><label class="f-label">Дней</label><input class="f-input" name="days" type="number" min="1" step="1" required></div>
+              <div><label class="f-label">Промо-скидка считается автоматически</label><input class="f-input" disabled placeholder="NEXON"></div>
+              <div class="full"><label class="f-label">Преимущества (по одному на строку)</label><textarea class="f-area" name="perks"></textarea></div>
+              <label class="check"><input type="checkbox" name="popular"> Пометить «Хит»</label>
+              <div><button class="btn btn-red" type="submit">Сохранить</button></div>
+            </div>
+          </form>
+        </div>
+        <div class="panel"><h3>Список тарифов</h3><div id="plan-list"></div></div>
+      </section>
+
+      <section class="admin-section" id="sec-users">
+        <div class="panel">
+          <h3>Игроки</h3>
+          <div class="tbl-wrap" id="users-table"></div>
+        </div>
+      </section>
+
+      <section class="admin-section" id="sec-orders">
+        <div class="panel">
+          <h3>Заявки на донат</h3>
+          <div class="tbl-wrap" id="orders-table"></div>
+        </div>
+      </section>
+
+      <section class="admin-section" id="sec-roulette">
+        <div class="panel">
+          <h3 id="case-form-title">Новый кейс</h3>
+          <form id="case-form">
+            <input type="hidden" name="id">
+            <div class="form-grid">
+              <div><label class="f-label">Название</label><input class="f-input" name="title" required></div>
+              <div><label class="f-label">Иконка (эмодзи)</label><input class="f-input" name="icon" placeholder="📦"></div>
+              <div><label class="f-label">Картинка кейса (выбери файл или впиши имя)</label>
+                <div class="upload-row">
+                  <input type="file" id="case-file" accept=".png,.jpg,.jpeg,.gif,.webp,.svg" class="f-input">
+                  <img id="case-img-preview" class="prize-thumb" style="width:44px;height:44px;border-radius:8px" src="" alt="" hidden>
+                </div>
+                <input class="f-input" name="img" id="case-img-input" list="img-list" placeholder="case-standard.svg или загрузи файл" style="margin-top:8px">
+              </div>
+              <div><label class="f-label">Цвет подсветки (#hex)</label><input class="f-input" name="accent" placeholder="#35a2ff"></div>
+              <div><label class="f-label">Цена прокрута, ₽</label><input class="f-input" name="cost" type="number" min="0" value="99" required></div>
+              <div><label class="f-label">Порядок (1 — первый)</label><input class="f-input" name="order" type="number" min="1" value="99"></div>
+              <label class="check"><input type="checkbox" name="freeDaily"> Бесплатный ежедневный</label>
+              <label class="check"><input type="checkbox" name="enabled" checked> Активен</label>
+              <div><button class="btn btn-red" type="submit">Сохранить кейс</button></div>
+            </div>
+          </form>
+        </div>
+        <div class="panel"><h3>Кейсы</h3><div id="case-list"></div></div>
+        <div class="panel">
+          <h3 id="prize-form-title">Новый приз</h3>
+          <form id="prize-form">
+            <input type="hidden" name="id">
+            <div class="form-grid">
+              <div><label class="f-label">Название</label><input class="f-input" name="title" required></div>
+              <div><label class="f-label">Иконка (эмодзи)</label><input class="f-input" name="icon" placeholder="🎁"></div>
+              <div><label class="f-label">Картинка приза (выбери файл или впиши имя)</label>
+                <div class="upload-row">
+                  <input type="file" id="prize-file" accept=".png,.jpg,.jpeg,.gif,.webp,.svg" class="f-input">
+                  <img id="prize-img-preview" class="prize-thumb" style="width:44px;height:44px;border-radius:8px" src="" alt="" hidden>
+                </div>
+                <input class="f-input" name="img" id="prize-img-input" list="img-list" placeholder="vip.svg или загрузи файл" style="margin-top:8px">
+              </div>
+              <div><label class="f-label">Редкость</label><select class="f-input" name="rarity">
+                <option value="common">Обычный</option>
+                <option value="rare">Редкий</option>
+                <option value="epic">Эпический</option>
+                <option value="legend">Легендарный</option>
+              </select></div>
+              <div><label class="f-label">Кейс</label><select class="f-input" name="caseId" id="prize-case-sel"></select></div>
+              <div><label class="f-label">Категория</label><select class="f-input" name="category">
+                <option value="status">Статусы</option>
+                <option value="transport">Транспорт</option>
+                <option value="property">Недвижимость</option>
+                <option value="money">Валюта</option>
+                <option value="items">Предметы</option>
+                <option value="bonus">Бонусы</option>
+              </select></div>
+              <div><label class="f-label">Шанс, %</label><input class="f-input" name="chance" type="number" min="0.1" max="100" step="0.1" required></div>
+              <div><label class="f-label">Тип приза</label><select class="f-input" name="type">
+                <option value="virtual">Привилегия / предмет (текстом)</option>
+                <option value="balance">Баланс, ₽</option>
+                <option value="spins">Бонусные прокруты, шт</option>
+              </select></div>
+              <div><label class="f-label">Значение (текст, ₽ или число прокрутов)</label><input class="f-input" name="value"></div>
+              <label class="check"><input type="checkbox" name="enabled" checked> Активен</label>
+              <div><button class="btn btn-red" type="submit">Сохранить</button></div>
+            </div>
+          </form>
+        </div>
+        <div class="panel"><h3>Призы рулетки</h3><div id="prize-list"></div><p class="empty" id="prize-sum"></p></div>
+        <div class="panel"><h3>Последние прокруты</h3><div class="tbl-wrap" id="spins-table"></div></div>
+      </section>
+
+      <section class="admin-section" id="sec-forum">
+        <div class="panel">
+          <h3 id="fsec-form-title">Новый раздел форума</h3>
+          <form id="fsection-form">
+            <input type="hidden" name="id">
+            <div class="form-grid">
+              <div><label class="f-label">Название</label><input class="f-input" name="title" required></div>
+              <div><label class="f-label">Иконка (эмодзи)</label><input class="f-input" name="icon" placeholder="💬"></div>
+              <div class="full"><label class="f-label">Описание</label><input class="f-input" name="desc"></div>
+              <div><label class="f-label">Порядок (1 — сверху)</label><input class="f-input" name="order" type="number" min="1" value="99"></div>
+              <label class="check"><input type="checkbox" name="adminOnly"> Темы создают только админы</label>
+              <div><button class="btn btn-red" type="submit">Сохранить</button></div>
+            </div>
+          </form>
+        </div>
+        <div class="panel"><h3>Разделы</h3><div id="fsection-list"></div></div>
+        <div class="panel"><h3>Темы (модерация)</h3><div class="tbl-wrap" id="fthreads-table"></div></div>
+      </section>
+
+      <section class="admin-section" id="sec-promo">
+        <div class="panel">
+          <h3 id="promo-form-title">Новый промокод</h3>
+          <form id="promo-form">
+            <input type="hidden" name="id">
+            <div class="form-grid">
+              <div><label class="f-label">Код (латиница, цифры, дефис)</label><input class="f-input" name="code" required placeholder="NEXON-2026"></div>
+              <div><label class="f-label">Тип награды</label><select class="f-input" name="type">
+                <option value="balance">Баланс, ₽</option>
+                <option value="spins">Бонусные прокруты, шт</option>
+                <option value="virtual">Привилегия (текстом)</option>
+              </select></div>
+              <div><label class="f-label">Значение (₽ / число прокрутов / текст)</label><input class="f-input" name="value" required></div>
+              <div><label class="f-label">Лимит активаций (0 = без лимита)</label><input class="f-input" name="maxUses" type="number" min="0" value="0"></div>
+              <label class="check"><input type="checkbox" name="active" checked> Активен</label>
+              <div><button class="btn btn-red" type="submit">Сохранить</button></div>
+            </div>
+          </form>
+        </div>
+        <div class="panel"><h3>Список промокодов</h3><div id="promo-list"></div></div>
+      </section>
+
+      <section class="admin-section" id="sec-rules">
+        <div class="panel">
+          <h3>Правила сервера</h3>
+          <div id="rules-editor"></div>
+          <button class="btn btn-ghost btn-sm" id="rule-add" type="button">+ Добавить правило</button>
+          <div style="margin-top:16px"><button class="btn btn-red" id="rules-save" type="button">Сохранить правила</button></div>
+        </div>
+      </section>
+
+      <section class="admin-section" id="sec-settings">
+        <div class="panel">
+          <h3>Настройки сайта и сервера</h3>
+          <form id="settings-form">
+            <div class="form-grid">
+              <div><label class="f-label">Название сервера</label><input class="f-input" name="serverName"></div>
+              <div><label class="f-label">IP сервера</label><input class="f-input" name="serverIp"></div>
+              <div><label class="f-label">Discord (ссылка или ник)</label><input class="f-input" name="discord"></div>
+              <div><label class="f-label">VK (ссылка)</label><input class="f-input" name="vk"></div>
+              <div><label class="f-label">Промокод</label><input class="f-input" name="promoCode"></div>
+              <div><label class="f-label">Скидка по промо, %</label><input class="f-input" name="promoPercent" type="number" min="0" max="90"></div>
+              <div><label class="f-label">Цена прокрута рулетки, ₽</label><input class="f-input" name="roulCost" type="number" min="0"></div>
+              <div><label class="f-label">Название (мониторинг)</label><input class="f-input" name="monName"></div>
+              <div><label class="f-label">Режим (мониторинг)</label><input class="f-input" name="monMode"></div>
+              <div><label class="f-label">Карта (мониторинг)</label><input class="f-input" name="monMap"></div>
+              <div><label class="f-label">Версия (мониторинг)</label><input class="f-input" name="monVersion"></div>
+              <div><label class="f-label">Онлайн (базовое число)</label><input class="f-input" name="monPlayers" type="number" min="0"></div>
+              <div><label class="f-label">Максимум слотов</label><input class="f-input" name="monMax" type="number" min="1"></div>
+              <div class="full"><button class="btn btn-red" type="submit">Сохранить настройки</button></div>
+            </div>
+          </form>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<datalist id="img-list"></datalist>
+<div class="toast" id="toast"></div>
+
+<script src="admin.js"></script>
+</body>
+</html>
