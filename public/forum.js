@@ -46,6 +46,8 @@ function avatarHTML(name, rank) {
   return '<div class="f-avatar" style="background:' + c + '">' + esc(n.charAt(0).toUpperCase()) + (staff ? '<i class="f-admin-dot"></i>' : '') + '</div>';
 }
 
+const BB_FONTS = ['Arial', 'Verdana', 'Georgia', 'Times New Roman', 'Courier New', 'Comic Sans MS', 'Impact', 'Oswald'];
+
 function renderBB(src) {
   let s = esc(src);
   const codes = [];
@@ -59,10 +61,23 @@ function renderBB(src) {
   s = s.replace(/\[s\]([\s\S]*?)\[\/s\]/g, '<s>$1</s>');
   s = s.replace(/\[size=(1[0-9]|2[0-4])\]([\s\S]*?)\[\/size\]/g, '<span style="font-size:$1px">$2</span>');
   s = s.replace(/\[color=(#[0-9a-fA-F]{3,6}|red|blue|green|yellow|orange|purple|white|gray|gold|cyan|pink|lime)\]([\s\S]*?)\[\/color\]/g, '<span style="color:$1">$2</span>');
+  s = s.replace(/\[font=([^\]\n]{1,30})\]([\s\S]*?)\[\/font\]/g, (m, f, body) => {
+    const canon = BB_FONTS.find(x => x.toLowerCase() === String(f).trim().toLowerCase());
+    return canon ? '<span style="font-family:\'' + canon + '\'">' + body + '</span>' : body;
+  });
+  s = s.replace(/\[left\]([\s\S]*?)\[\/left\]/g, '<div class="bb-left">$1</div>');
+  s = s.replace(/\[center\]([\s\S]*?)\[\/center\]/g, '<div class="bb-center">$1</div>');
+  s = s.replace(/\[right\]([\s\S]*?)\[\/right\]/g, '<div class="bb-right">$1</div>');
+  s = s.replace(/\[hr\]/g, '<hr class="bb-hr">');
+  s = s.replace(/\[img\](https?:\/\/[^\s\]]+)\[\/img\]/g, '<img class="bb-img" src="$1" alt="изображение" loading="lazy">');
+  s = s.replace(/\[video\](https?:\/\/(?:www\.)?(?:m\.)?(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})[^\s\]]*)\[\/video\]/g,
+    '<iframe class="bb-video" src="https://www.youtube-nocookie.com/embed/$2" title="видео" allowfullscreen loading="lazy"></iframe>');
   s = s.replace(/\[quote(?:=([^\]\n]{1,40}))?\]([\s\S]*?)\[\/quote\]/g, (m, n, body) =>
     '<blockquote class="bb-quote"><b>' + (n ? esc(n) : 'Цитата') + (n ? ' писал:' : ':') + '</b><span>' + body + '</span></blockquote>');
-  s = s.replace(/\[list\]([\s\S]*?)\[\/list\]/g, (m, inner) =>
-    '<ul class="bb-list">' + inner.replace(/\[\*\]([^\[]*)/g, '<li>$1</li>') + '</ul>');
+  s = s.replace(/\[list(=1)?\]([\s\S]*?)\[\/list\]/g, (m, num, inner) => {
+    const items = inner.replace(/\[\*\]([^\[]*)/g, '<li>$1</li>');
+    return num ? '<ol class="bb-list">' + items + '</ol>' : '<ul class="bb-list">' + items + '</ul>';
+  });
   s = s.replace(/\[url=(https?:\/\/[^\s\]]+)\]([\s\S]*?)\[\/url\]/g, '<a href="$1" target="_blank" rel="noopener">$2</a>');
   s = s.replace(/\[url\](https?:\/\/[^\s\]]+)\[\/url\]/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
   s = s.replace(/\[spoiler(?:=([^\]\n]{1,50}))?\]([\s\S]*?)\[\/spoiler\]/g, (m, t, body) =>
@@ -101,33 +116,63 @@ function attachToolbar(ta) {
     b.title = title;
     b.addEventListener('click', () => wrapSel(ta, open, close));
     bar.appendChild(b);
+    return b;
   };
-  bar.appendChild(document.createElement('span')).className = 'f-tb-sep';
+  const sep = () => { const s = document.createElement('span'); s.className = 'f-tb-sep'; bar.appendChild(s); };
+  const sel = (cls, html) => {
+    const e = document.createElement('select');
+    e.className = cls;
+    e.innerHTML = html;
+    bar.appendChild(e);
+    return e;
+  };
+  sep();
   btn('<b>B</b>', 'Жирный', '[b]', '[/b]');
   btn('<i>I</i>', 'Курсив', '[i]', '[/i]');
   btn('<u>U</u>', 'Подчёркнутый', '[u]', '[/u]');
   btn('<s>S</s>', 'Зачёркнутый', '[s]', '[/s]');
-  const sep1 = document.createElement('span'); sep1.className = 'f-tb-sep'; bar.appendChild(sep1);
-  const sizeSel = document.createElement('select');
-  sizeSel.className = 'f-tb-sel';
-  sizeSel.innerHTML = '<option value="">Размер</option><option value="12">Мелкий</option><option value="16">Обычный</option><option value="20">Крупный</option><option value="24">Огромный</option>';
+  sep();
+  const sizeSel = sel('f-tb-sel', '<option value="">Размер</option><option value="12">Мелкий</option><option value="16">Обычный</option><option value="20">Крупный</option><option value="24">Огромный</option>');
   sizeSel.addEventListener('change', () => { if (sizeSel.value) { wrapSel(ta, '[size=' + sizeSel.value + ']', '[/size]'); sizeSel.value = ''; } });
-  bar.appendChild(sizeSel);
-  const colSel = document.createElement('select');
-  colSel.className = 'f-tb-sel';
-  colSel.innerHTML = '<option value="">Цвет</option>' +
+  const fontSel = sel('f-tb-sel', '<option value="">Шрифт</option>' + BB_FONTS.map(f => '<option value="' + f + '">' + f + '</option>').join(''));
+  fontSel.addEventListener('change', () => { if (fontSel.value) { wrapSel(ta, '[font=' + fontSel.value + ']', '[/font]'); fontSel.value = ''; } });
+  const colSel = sel('f-tb-sel', '<option value="">Цвет</option>' +
     '<option value="red">Красный</option><option value="blue">Синий</option><option value="green">Зелёный</option>' +
     '<option value="orange">Оранжевый</option><option value="purple">Фиолетовый</option><option value="gold">Золотой</option>' +
-    '<option value="cyan">Голубой</option><option value="white">Белый</option><option value="gray">Серый</option>';
+    '<option value="cyan">Голубой</option><option value="white">Белый</option><option value="gray">Серый</option>');
   colSel.addEventListener('change', () => { if (colSel.value) { wrapSel(ta, '[color=' + colSel.value + ']', '[/color]'); colSel.value = ''; } });
-  bar.appendChild(colSel);
-  const sep2 = document.createElement('span'); sep2.className = 'f-tb-sep'; bar.appendChild(sep2);
+  sep();
+  btn('⬅', 'По левому краю', '[left]', '[/left]');
+  btn('↔', 'По центру', '[center]', '[/center]');
+  btn('➡', 'По правому краю', '[right]', '[/right]');
+  btn('―', 'Разделительная линия', '[hr]\n', '');
+  sep();
   btn('« »', 'Цитата', '[quote]', '[/quote]');
   btn('&lt;/&gt;', 'Код', '[code]', '[/code]');
   btn('• Список', 'Список', '[list]\n[*]', '\n[/list]');
+  btn('1. Список', 'Нумерованный список', '[list=1]\n[*]', '\n[/list]');
   btn('🔗', 'Ссылка', '[url=https://]', '[/url]');
+  btn('🖼', 'Изображение по ссылке', '[img]https://', '[/img]');
+  btn('▶', 'YouTube видео', '[video]https://www.youtube.com/watch?v=', '[/video]');
   btn('👁', 'Спойлер', '[spoiler]', '[/spoiler]');
-  const sep3 = document.createElement('span'); sep3.className = 'f-tb-sep'; bar.appendChild(sep3);
+  btn('@', 'Упомянуть игрока', '@', '');
+  sep();
+  let pv = null;
+  let pvOn = false;
+  const pvBtn = btn('🔍 Предпросмотр', 'Предпросмотр сообщения (BB-коды)', '', '');
+  pvBtn.addEventListener('click', () => {
+    if (!pv) {
+      pv = document.createElement('div');
+      pv.className = 'f-preview';
+      ta.parentNode.insertBefore(pv, ta);
+      ta.addEventListener('input', () => { if (pvOn) pv.innerHTML = renderBB(ta.value) || '<p class="empty" style="padding:8px 0">Пусто — пиши текст выше</p>'; });
+    }
+    pvOn = !pvOn;
+    pv.hidden = !pvOn;
+    pvBtn.classList.toggle('f-tb-on', pvOn);
+    if (pvOn) pv.innerHTML = renderBB(ta.value) || '<p class="empty" style="padding:8px 0">Пусто — пиши текст выше</p>';
+  });
+  sep();
   for (const sm of SMILES) {
     const b = document.createElement('button');
     b.type = 'button';
@@ -296,7 +341,7 @@ async function showThread(id, page) {
     pager +
     (canReply
       ? '<div class="panel f-reply"><h3>Быстрый ответ</h3>' +
-        '<textarea class="f-area" id="reply-text" maxlength="5000" placeholder="Напиши сообщение… Поддерживается BB-коды: [b] [i] [u] [color] [size] [quote] [code] [spoiler]"></textarea>' +
+        '<textarea class="f-area" id="reply-text" maxlength="5000" placeholder="Напиши сообщение… BB-коды: [b] [i] [u] [size] [font] [color] [left] [center] [right] [quote] [code] [list] [img] [video] [spoiler] [hr]"></textarea>' +
         '<div class="form-error" id="reply-error"></div>' +
         '<button class="btn btn-red" id="reply-send">Ответить</button></div>'
       : '<div class="panel"><p class="empty">' + (t.locked ? '🔒 Тема закрыта для ответов' : user ? '' : '<a href="index.html" style="color:var(--red)">Войди</a>, чтобы отвечать') + '</p></div>');
