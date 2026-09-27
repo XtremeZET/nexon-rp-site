@@ -177,6 +177,7 @@ function renderAuth() {
     document.getElementById('login-btn').addEventListener('click', () => openAuth('login'));
     document.getElementById('register-btn').addEventListener('click', () => openAuth('register'));
   }
+  updateChatAccess();
 }
 
 function openModal(id) {
@@ -332,6 +333,85 @@ function renderTop(d) {
   }
 }
 
+const CHAT_RANK_ICO = { owner: '👑', admin: '🛡️', moderator: '⚔️', helper: '🤝', vip: '⭐', player: '' };
+const chatState = { meId: 0, canDel: false };
+
+function fmtTime(iso) {
+  const d = new Date(iso);
+  if (isNaN(d)) return '';
+  return d.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+}
+
+function renderChat(msgs) {
+  const box = document.getElementById('chat-box');
+  if (!box) return;
+  const nearBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 80;
+  if (!msgs.length) {
+    box.innerHTML = '<p class="empty">Сообщений пока нет — напиши первым!</p>';
+    return;
+  }
+  box.innerHTML = msgs.map(m =>
+    '<div class="chat-msg">' +
+      '<div class="chat-head">' +
+        '<b>' + (CHAT_RANK_ICO[m.rank] ? CHAT_RANK_ICO[m.rank] + ' ' : '') + esc(m.nick) + '</b>' +
+        '<span>' + fmtTime(m.date) + '</span>' +
+        (chatState.canDel || m.userId === chatState.meId ? '<button class="chat-del" data-id="' + m.id + '" title="Удалить">×</button>' : '') +
+      '</div>' +
+      '<div class="chat-text">' + esc(m.text) + '</div>' +
+    '</div>'
+  ).join('');
+  if (nearBottom) box.scrollTop = box.scrollHeight;
+  box.querySelectorAll('.chat-del').forEach(b => b.addEventListener('click', async () => {
+    try { await api('/api/chat/delete', { id: Number(b.dataset.id) }); loadChat(); } catch (e) { showToast(e.message); }
+  }));
+}
+
+async function loadChat() {
+  const box = document.getElementById('chat-box');
+  if (!box) return;
+  try {
+    const d = await api('/api/chat');
+    chatState.meId = d.meId;
+    chatState.canDel = d.canDel;
+    renderChat(d.messages);
+  } catch (e) {}
+}
+
+function updateChatAccess() {
+  const inp = document.getElementById('chat-input');
+  if (!inp) return;
+  const btn = document.getElementById('chat-send');
+  const hint = document.getElementById('chat-hint');
+  if (currentUser) {
+    inp.disabled = false;
+    btn.disabled = false;
+    hint.hidden = true;
+  } else {
+    inp.disabled = true;
+    btn.disabled = true;
+    hint.hidden = false;
+  }
+}
+
+document.getElementById('chat-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const inp = document.getElementById('chat-input');
+  const text = inp.value.trim();
+  if (!text) return;
+  inp.value = '';
+  try {
+    await api('/api/chat', { text });
+    loadChat();
+  } catch (ex) {
+    showToast(ex.message);
+  }
+});
+
+document.querySelectorAll('.faq-q').forEach(q => q.addEventListener('click', () => {
+  const item = q.parentElement;
+  item.classList.toggle('open');
+}));
+
 async function boot() {
   try {
     const me = await api('/api/me');
@@ -365,6 +445,8 @@ async function boot() {
   try {
     renderTop(await api('/api/leaderboard'));
   } catch (e) {}
+  loadChat();
+  setInterval(loadChat, 5000);
 }
 
 boot();

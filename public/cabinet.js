@@ -37,6 +37,13 @@ const STATUS = {
   rejected: ['Отклонена', 'st-rejected']
 };
 
+const RARITY = {
+  common: ['Обычный', 'hl-common'],
+  rare: ['Редкий', 'hl-rare'],
+  epic: ['Эпический', 'hl-epic'],
+  legend: ['Легендарный', 'hl-legend']
+};
+
 const toast = document.getElementById('toast');
 let toastTimer;
 function showToast(text) {
@@ -88,6 +95,17 @@ async function loadCabinet() {
     : '<li style="color:var(--muted)">Пока нет — загляни в <a href="index.html#donate" style="color:var(--red)">донат</a></li>';
 
   const data = await api('/api/cabinet');
+  document.getElementById('rs-total').textContent = data.stats.total;
+  document.getElementById('rs-rare').textContent = data.stats.rare;
+  document.getElementById('rs-free').textContent = data.stats.free;
+  document.getElementById('rs-spent').textContent = data.stats.spent + ' ₽';
+  const wins = document.getElementById('rs-wins');
+  if (data.lastWins.length) {
+    wins.innerHTML = data.lastWins.map(w => {
+      const r = RARITY[w.rarity] || RARITY.common;
+      return '<li><span><b class="' + r[1] + '">' + esc(w.prize) + '</b><br><span class="l">' + esc(w.caseTitle || '') + '</span></span><span class="l">' + fmtDate(w.date) + '</span></li>';
+    }).join('');
+  }
   const box = document.getElementById('orders-box');
   if (!data.orders.length) {
     box.innerHTML = '<p class="empty">Заявок пока нет. Тарифы — на <a href="index.html#donate" style="color:var(--red)">главной странице</a></p>';
@@ -102,6 +120,41 @@ async function loadCabinet() {
     ).join('') +
     '</tbody></table>';
 }
+
+async function loadCheckin() {
+  try {
+    const d = await api('/api/checkin');
+    const btn = document.getElementById('checkin-btn');
+    document.getElementById('checkin-streak').textContent = d.streak + ' 🔥';
+    document.getElementById('checkin-next').textContent = '+' + d.next.balance + ' ₽' + (d.next.spins ? ' + ' + d.next.spins + ' прокрут' : '');
+    const note = document.getElementById('checkin-note');
+    if (d.available) {
+      btn.disabled = false;
+      btn.textContent = 'Забрать награду';
+      note.textContent = 'Каждый 7-й день подряд — бонусный прокрут рулетки!';
+    } else {
+      btn.disabled = true;
+      btn.textContent = 'Награда получена';
+      const left = new Date(d.nextAt).getTime() - Date.now();
+      note.textContent = 'Следующая через ~' + (left > 3600000 ? Math.ceil(left / 3600000) + ' ч' : Math.ceil(left / 60000) + ' мин');
+    }
+  } catch (e) {}
+}
+
+document.getElementById('checkin-btn').addEventListener('click', async () => {
+  const btn = document.getElementById('checkin-btn');
+  btn.disabled = true;
+  btn.textContent = 'Забираем…';
+  try {
+    const d = await api('/api/checkin', {});
+    showToast('Получено: ' + d.reward);
+    await loadCheckin();
+    await loadCabinet();
+  } catch (ex) {
+    showToast(ex.message);
+    loadCheckin();
+  }
+});
 
 document.getElementById('promo-form').addEventListener('submit', async e => {
   e.preventDefault();
@@ -132,6 +185,7 @@ document.getElementById('pass-form').addEventListener('submit', async e => {
   }
 });
 
+loadCheckin();
 loadCabinet().catch(() => {
   document.getElementById('orders-box').innerHTML = '<p class="empty">Ошибка загрузки данных</p>';
 });

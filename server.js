@@ -119,6 +119,7 @@ function seed() {
     ],
     orders: [],
     spins: [],
+    chat: [],
     cases: [
       { id: 1, title: 'Стандартный', icon: '📦', img: 'case-standard.svg', accent: '#35a2ff', cost: 99, freeDaily: true, order: 1, enabled: true },
       { id: 2, title: 'Автопарк', icon: '🚗', img: 'case-auto.svg', accent: '#ff5a4d', cost: 299, freeDaily: false, order: 2, enabled: true },
@@ -269,6 +270,9 @@ function migrateDb() {
   db.users.forEach(u => { if (u.lastFreeSpin === undefined) { u.lastFreeSpin = null; dirty = true; } });
   db.users.forEach(u => { if (u.spinStreak === undefined) { u.spinStreak = 0; dirty = true; } });
   db.users.forEach(u => { if (u.bonusSpins === undefined) { u.bonusSpins = 0; dirty = true; } });
+  db.users.forEach(u => { if (u.lastCheckin === undefined) { u.lastCheckin = null; dirty = true; } });
+  db.users.forEach(u => { if (u.checkinStreak === undefined) { u.checkinStreak = 0; dirty = true; } });
+  if (!Array.isArray(db.chat)) { db.chat = []; dirty = true; }
   db.users.forEach(u => { if (!u.rank) { u.rank = u.role === 'admin' ? 'owner' : 'player'; dirty = true; } });
   if (!Array.isArray(db.prizesSynced2Done)) db.prizesSynced2Done = false;
   if (!db.prizesSynced4) {
@@ -390,6 +394,13 @@ function monitorNow() {
   return m;
 }
 
+const chatLast = {};
+
+function checkinReward(streak) {
+  const day = Math.max(1, streak);
+  return { balance: 10 + Math.min(day - 1, 6) * 5, spins: day % 7 === 0 ? 1 : 0 };
+}
+
 async function api(req, res, pathname, query) {
   const user = sessionUser(req);
   const method = req.method;
@@ -462,7 +473,15 @@ async function api(req, res, pathname, query) {
   if (method === 'GET' && pathname === '/api/cabinet') {
     if (!user) return sendJSON(res, 401, { error: 'Требуется вход' });
     const orders = db.orders.filter(o => o.userId === user.id).sort((a, b) => b.created > a.created ? 1 : -1);
-    return sendJSON(res, 200, { user: publicUser(user), orders });
+    const mySpins = db.spins.filter(s => s.userId === user.id);
+    const stats = {
+      total: mySpins.length,
+      rare: mySpins.filter(s => s.rarity === 'legend' || s.rarity === 'epic').length,
+      free: mySpins.filter(s => s.free).length,
+      spent: mySpins.reduce((sum, s) => sum + (Number(s.cost) || 0), 0)
+    };
+    const lastWins = mySpins.slice(-10).reverse().map(s => ({ prize: s.prize, rarity: s.rarity, caseTitle: s.caseTitle, date: s.date }));
+    return sendJSON(res, 200, { user: publicUser(user), orders, stats, lastWins });
   }
 
   if (method === 'POST' && pathname === '/api/order') {
@@ -783,6 +802,73 @@ async function api(req, res, pathname, query) {
       .slice(0, 10)
       .map(u => ({ login: u.login, nick: u.nick || u.login, balance: u.balance || 0, rank: rankOf(u) }));
     return sendJSON(res, 200, { lucky, rich });
+  }
+
+  if (method === 'GET' && pathname === '/api/checkin') {
+    if (!user) return sendJSON(res, 401, { error: 'Требуется вход' });
+    const DAY = 24 * 3600 * 1000;
+    const last = user.lastCheckin ? new Date(user.lastCheckin).getTime() : 0;
+    const available = !last || Date.now() - last >= DAY;
+    const nextStreak = last && Date.now() - last <= 48 * 3600 * 1000 ? (user.checkinStreak || 0) + 1 : 1;
+    return sendJSON(res, 200, {
+      available,
+      nextAt: !available ? new Date(last + DAY).toISOString() : null,
+      streak: user.checkinStreak || 0,
+      next: checkinReward(nextStreak)
+    });
+  }
+
+  if (method === 'POST' && pathname === '/api/checkin') {
+    if (!user) return sendJSON(res, 401, { error: 'Требуется вход' });
+    if (user.banned) return sendJSON(res, 403, { error: 'Аккаунт заблокирован' });
+    const DAY = 24 * 3600 * 1000;
+    const last = user.lastCheckin ? new Date(user.lastCheckin).getTime() : 0;
+    if (last && Date.now() - last < DAY) return sendJSON(res, 400, { error: 'Награду уже получали — приходи завтра' });
+    user.checkinStreak = last && Date.now() - last <= 48 * 3600 * 1000 ? (user.checkinStreak || 0) + 1 : 1;
+    user.lastCheckin = new Date().toISOString();
+    const rw = checkinReward(user.checkinStreak);
+    user.balance += rw.balance;
+    if (rw.spins) user.bonusSpins = (user.bonusSpins || 0) + rw.spins;
+    saveDb();
+    return sendJSON(res, 200, {
+      reward: '+' + rw.balance + ' ₽' + (rw.spins ? ' и +' + rw.spins + ' прокрут рулетки' : ''),
+      streak: user.checkinStreak,
+      balance: user.balance,
+      nextAt: new Date(Date.now() + DAY).toISOString()
+    });
+  }
+
+  if (method === 'GET' && pathname === '/api/chat') {
+    const msgs = db.chat.slice(-50);
+    return sendJSON(res, 200, { messages: msgs, meId: user ? user.id : 0, canDel: user ? canDelAny(user) : false });
+  }
+
+  if (method === 'POST' && pathname === '/api/chat') {
+    if (!user) return sendJSON(res, 401, { error: 'Требуется вход' });
+    if (user.banned) return sendJSON(res, 403, { error: 'Аккаунт заблокирован' });
+    const now = Date.now();
+    if (now - (chatLast[user.id] || 0) < 4000) return sendJSON(res, 429, { error: 'Не так быстро — подожди пару секунд' });
+    const b = await readBody(req);
+    if (!b) return sendJSON(res, 400, { error: 'Некорректный запрос' });
+    const text = String(b.text || '').trim().slice(0, 300);
+    if (!text) return sendJSON(res, 400, { error: 'Пустое сообщение' });
+    const msg = { id: ++db.seq, userId: user.id, nick: user.nick || user.login, rank: rankOf(user), text, date: new Date().toISOString() };
+    db.chat.push(msg);
+    if (db.chat.length > 200) db.chat = db.chat.slice(-200);
+    chatLast[user.id] = now;
+    saveDb();
+    return sendJSON(res, 200, { ok: true, message: msg });
+  }
+
+  if (method === 'POST' && pathname === '/api/chat/delete') {
+    if (!user) return sendJSON(res, 401, { error: 'Требуется вход' });
+    const b = await readBody(req);
+    const m = db.chat.find(x => x.id === Number(b && b.id));
+    if (!m) return sendJSON(res, 404, { error: 'Сообщение не найдено' });
+    if (m.userId !== user.id && !canDelAny(user)) return sendJSON(res, 403, { error: 'Нет доступа' });
+    db.chat = db.chat.filter(x => x.id !== m.id);
+    saveDb();
+    return sendJSON(res, 200, { ok: true });
   }
 
   if (!pathname.startsWith('/api/admin/')) return sendJSON(res, 404, { error: 'Not found' });
