@@ -1292,7 +1292,6 @@ body {
 .roul-marker { background: var(--acc, var(--gold)); box-shadow: 0 0 16px var(--acc, rgba(159, 230, 255, 0.85)); }
 .roul-marker::before { border-top-color: var(--acc, var(--gold)); }
 .roul-marker::after { border-bottom-color: var(--acc, var(--red)); }
-.roul-strip.blur, .roul-strip[style*="blur"] { will-change: filter; }
 .roul-window.shake { animation: roulShake 0.5s ease; }
 @keyframes roulShake {
   0%, 100% { transform: translateX(0); }

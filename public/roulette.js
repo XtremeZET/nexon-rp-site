@@ -55,6 +55,7 @@ const caseSelect = document.getElementById('case-select');
 
 const STRIP_COUNT = 58;
 const WIN_INDEX = 44;
+let stripX = 0;
 
 let cases = [];
 let activeCase = null;
@@ -222,10 +223,12 @@ function renderCases() {
   caseSelect.querySelectorAll('[data-case]').forEach(b => b.addEventListener('click', () => {
     if (spinning) return;
     activeCase = cases.find(c => c.id === Number(b.dataset.case));
-    renderCases();
-    renderStrip(null);
-    renderChances();
-    updateUI();
+    rewindStrip().then(() => {
+      renderCases();
+      renderStrip(null);
+      renderChances();
+      updateUI();
+    });
   }));
 }
 
@@ -281,6 +284,16 @@ function weightedPick() {
   return pool[0];
 }
 
+function rewindStrip() {
+  if (stripX === 0) return Promise.resolve();
+  return new Promise(res => {
+    strip.style.transition = 'transform 480ms cubic-bezier(.25,.8,.35,1)';
+    strip.style.transform = 'translate3d(0,0,0)';
+    stripX = 0;
+    setTimeout(res, 500);
+  });
+}
+
 function renderStrip(winnerId) {
   const pool = activeCase ? activeCase.prizes : [];
   let html = '';
@@ -292,6 +305,9 @@ function renderStrip(winnerId) {
     html += itemHTML(p);
   }
   strip.innerHTML = html;
+  strip.style.transition = 'none';
+  strip.style.transform = 'translate3d(0,0,0)';
+  stripX = 0;
 }
 
 function stepWidth() {
@@ -469,8 +485,8 @@ async function doSpin(demo) {
   demoBtn.disabled = true;
   spinBtn.textContent = 'Крутим…';
 
-  const duration = fastOn ? 1700 : 6500;
-  const curve = fastOn ? 'cubic-bezier(.15, .7, .2, 1)' : 'cubic-bezier(.08, .72, .12, 1)';
+  const duration = fastOn ? 1900 : 6800;
+  const curve = fastOn ? 'cubic-bezier(.2, .6, .25, 1)' : 'cubic-bezier(.15, .6, .23, 1)';
 
   let data = null;
   let prize;
@@ -490,18 +506,16 @@ async function doSpin(demo) {
     }
   }
 
+  await rewindStrip();
   renderStrip(prize.id);
+  const winItem = strip.children[WIN_INDEX];
   const step = stepWidth();
   const jitter = (Math.random() * 0.5 - 0.25) * step;
-  const offset = WIN_INDEX * step + step / 2 - win_.clientWidth / 2 + jitter;
-  strip.style.transition = 'none';
-  strip.style.transform = 'translateX(0)';
-  strip.style.filter = 'blur(0px)';
+  const offset = (winItem ? winItem.offsetLeft + winItem.offsetWidth / 2 : WIN_INDEX * step + step / 2) - win_.clientWidth / 2 + jitter;
   void strip.offsetWidth;
-  strip.style.transition = 'filter 0.4s, transform ' + duration + 'ms ' + curve;
-  strip.style.filter = 'blur(3px)';
-  strip.style.transform = 'translateX(' + (-offset) + 'px)';
-  setTimeout(() => { strip.style.transition = 'filter 0.7s'; strip.style.filter = 'blur(0px)'; }, duration * 0.62);
+  strip.style.transition = 'transform ' + duration + 'ms ' + curve;
+  strip.style.transform = 'translate3d(' + (-offset) + 'px,0,0)';
+  stripX = -offset;
   const stopTicks = scheduleTicks(duration);
   startSound();
 
